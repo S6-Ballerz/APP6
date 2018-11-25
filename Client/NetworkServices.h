@@ -1,5 +1,8 @@
 #pragma once
 
+//#define INCL_WINSOCK_API_PROTOTYPES
+#include <WinSock2.h>
+
 struct FileStruct
 {
 	bool succes;
@@ -17,9 +20,11 @@ public:
 	bool start(char * ipAddress, char * port);
 	bool stop();
 	bool sendFile(char* tampon, unsigned int size);
+	FileStruct receiveFile(char * tampon, char * port);
 
 private:
+	SOCKET soc;
 	FileStruct fichierRecu;
-
+	WSADATA wsa;
 };
 
