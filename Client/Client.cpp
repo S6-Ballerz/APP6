@@ -8,6 +8,10 @@ Silver Moon (m00n.silv3r@gmail.com)
 
 using namespace std;
 
+/*
+miguelito libre
+
+*/
 #pragma comment(lib,"ws2_32.lib") //Winsock Library
 #pragma warning (disable : 4996)
 
