@@ -2,8 +2,11 @@
 Simple udp client
 Silver Moon (m00n.silv3r@gmail.com)
 */
-#include<stdio.h>
-#include<winsock2.h>
+
+#include <iostream>
+#include <winsock2.h>
+
+using namespace std;
 
 #pragma comment(lib,"ws2_32.lib") //Winsock Library
 #pragma warning (disable : 4996)
@@ -47,7 +50,7 @@ int main(void)
 	while (1)
 	{
 		printf("Enter message : ");
-		gets(message);
+		cin >> message;
 
 		//send the message
 		if (sendto(s, message, strlen(message), 0, (struct sockaddr *) &si_other, slen) == SOCKET_ERROR)
