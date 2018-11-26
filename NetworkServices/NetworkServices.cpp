@@ -11,24 +11,14 @@ NetworkServices::~NetworkServices()
 {
 }
 
-bool NetworkServices::start(char * ipAddress, char * port)
+bool NetworkServices::start(char * ipAddress, unsigned int port)
 {
-	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
-		return false;
-
-	soc = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-	if (soc == SOCKET_ERROR)
-		return false;
 
 	return true;
 }
 
 bool NetworkServices::stop()
 {
-	if (closesocket(soc) == SOCKET_ERROR)
-		return false;
-	if(WSACleanup() == SOCKET_ERROR)
-		return false;
 
 	return true;
 }
@@ -38,7 +28,7 @@ bool NetworkServices::sendFile(char * tampon, unsigned int size)
 	return false;
 }
 
-FileStruct NetworkServices::receiveFile(char * tampon, char * port)
+FileStruct NetworkServices::receiveFile(char * tampon, unsigned int port)
 {
 	return FileStruct();
 }

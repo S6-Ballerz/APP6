@@ -117,7 +117,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\NetworkServices\NetworkServices.cpp" />
-    <ClCompile Include="Serveur.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="old_Serveur.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\NetworkServices\NetworkServices.h" />

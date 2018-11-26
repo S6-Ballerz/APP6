@@ -13,7 +13,7 @@ Silver Moon ( m00n.silv3r@gmail.com )
 #define BUFLEN 512  //Max length of buffer
 #define PORT 8888   //The port on which to listen for incoming data
 
-int main()
+int pain()
 {
 	SOCKET s;
 	struct sockaddr_in server, si_other;
