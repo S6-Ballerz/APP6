@@ -50,13 +50,13 @@ bool NetworkServices::start()
 	int test2;
 	int connection_succes = -1;
 	connection_succes = connect(soc, (struct sockaddr *) &si_other, sizeof(si_other));
-	printf("after conenct()\n");  //for debugging
+	//printf("after conenct()\n");  //for debugging
 	if (connection_succes != 0)
 	{
-		printf("Error %d in client while instantiating socket\n", WSAGetLastError());
+		printf("Error %d La connection a echoue\n", WSAGetLastError());
 		cin >> test2;
 	}
-	printf("The client has found a server!");
+	printf("La connectionne fonctionne!");
 
 	cin >> test;
 
@@ -71,6 +71,26 @@ bool NetworkServices::stop()
 
 bool NetworkServices::sendFile(char * tampon, unsigned int size)
 {
+	/*TlHeader entete;
+	char donnee[DATA_LENGTH];
+	char header_data[HEADER_SIZE];
+	int i = 0;
+	int j = 1;
+
+	while (i < MAX_FILE_SIZE) {
+		memcpy(donnee,tampon+(i*DATA_LENGTH), DATA_LENGTH)
+		
+		if (j == 1) {
+		
+			entete.premier = "d"; 
+
+		}
+		
+		j++;
+
+
+		tlSend();
+	}*/
 	return false;
 }
 

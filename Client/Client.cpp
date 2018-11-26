@@ -31,22 +31,18 @@ int main(void)
 	ifstream inFile;
 	string FileName;
 	string ipAdress;
-	const int File_Length = 8192;
-	//char FileContent[File_Length];
+	unsigned int File_Length;
+	char FileContent[MAX_FILE_SIZE];
 
 
 	//start communication
 	while (1)
 	{
-		
-		TransportLayer.start();
-
-
-		/*printf("\n Entrez le nom du fichier complet à téléverser : ");
+		printf("\n Entrez le nom du fichier a televerser ");
 		cin >> FileName;
 
+
 		if (FileName == "validation.txt") {
-			printf("\n Le fichier text est pret a etre envoyer ");
 			inFile.open("C:\\Users\\barm1815\\APP6\\validation.txt");
 			if (!inFile) {
 				cerr << "Unable to open file datafile.txt";
@@ -54,8 +50,10 @@ int main(void)
 			}
 			while (!inFile.eof()) {
 				inFile >> FileContent;
-				cout << FileContent;
+				//cout << FileContent;
 			}
+			File_Length = inFile.tellg();
+			cout << File_Length;
 			inFile.close();
 		}
 		else {
@@ -65,17 +63,24 @@ int main(void)
 		printf("\n Entrer ladresse ip du destinataire (127.0.0.1) ");
 		cin >> ipAdress;
 
-		TransportLayer.sendFile(FileContent, File_Length);
+		if (ipAdress == "127.0.0.1") {
+		
+			TransportLayer.start();
+			TransportLayer.sendFile(FileContent, File_Length);
+		
+		
+		}
+
 
 		//printf("\n Entrez le message : ");
 		//cin >> message;
 
 		//send the message
-		if (sendto(s, message, strlen(message), 0, (struct sockaddr *) &si_other, slen) == SOCKET_ERROR)
+		/*if (sendto(s, message, strlen(message), 0, (struct sockaddr *) &si_other, slen) == SOCKET_ERROR)
 		{
 			printf("sendto() failed with error code : %d", WSAGetLastError());
 			exit(EXIT_FAILURE);
-		}
+		}*/
 
 		//receive a reply and print it
 		//clear the buffer by filling null, it might have previously received data
