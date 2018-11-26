@@ -11,7 +11,7 @@
 
 #define PACKET_SIZE 200
 #define HEADER_SIZE 11
-#define DATA_LENGTH 189
+#define DATA_LENGTH (PACKET_SIZE-HEADER_SIZE)
 
 struct FileStruct
 {
