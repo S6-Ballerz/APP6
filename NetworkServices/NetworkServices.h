@@ -9,11 +9,30 @@
 #define DEFAULT_PORT 8888
 #define MAX_FILE_SIZE 8192
 
+#define PACKET_SIZE 200
+#define HEADER_SIZE 11
+#define DATA_LENGTH 189
+
 struct FileStruct
 {
 	bool succes;
 	char filename[201];
 	unsigned int sizeFile;
+};
+
+struct TlHeader
+{
+	unsigned premier;
+	unsigned dernier;
+	unsigned courant;
+	char ctlChar;
+	uint32_t CRC;
+};
+
+struct TlPacketInfo
+{
+	TlHeader header;
+	char* data;
 };
 
 class NetworkServices
@@ -30,8 +49,15 @@ public:
 	FileStruct receiveFile(char * tampon, unsigned int port = DEFAULT_PORT);
 
 private:
+
+	// Private data members
 	SOCKET soc;
 	WSADATA wsa;
 	struct sockaddr_in server, si_other;
+	int slen;
+
+	// Private Methods
+	bool tlSend(TlHeader header, char* data);
+	TlPacketInfo tlReceiver(char* data);
 };
 
