@@ -2,6 +2,9 @@
 
 //#define INCL_WINSOCK_API_PROTOTYPES
 #include <WinSock2.h>
+#include <stdexcept>
+
+#pragma comment(lib,"ws2_32.lib") //Winsock Library
 
 #define DEFAULT_PORT 8888
 #define MAX_FILE_SIZE 8192
@@ -29,5 +32,6 @@ public:
 private:
 	SOCKET soc;
 	WSADATA wsa;
+	struct sockaddr_in server, si_other;
 };
 

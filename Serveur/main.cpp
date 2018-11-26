@@ -7,6 +7,7 @@
 
 #include <thread>
 #include <iostream>
+#include <fstream>
 
 #include "../NetworkServices/NetworkServices.h"
 
@@ -14,6 +15,7 @@ using namespace std;
 
 NetworkServices transLayer;
 FileStruct file;
+ofstream fileStream;
 
 char fileBuffer[MAX_FILE_SIZE];
 
@@ -30,7 +32,11 @@ void serverThreadFunction()
 			cout << "Taille du fichier: " << file.sizeFile << " octets" << endl;
 
 			// Write output file
+			fileStream.open(file.filename);
 
+			fileStream.write(fileBuffer, file.sizeFile);
+
+			fileStream.close();
 		}
 		else
 		{
