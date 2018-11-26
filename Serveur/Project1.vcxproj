@@ -116,7 +116,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\NetworkServices\NetworkServices.cpp" />
     <ClCompile Include="Serveur.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\NetworkServices\NetworkServices.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
