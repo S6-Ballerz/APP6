@@ -96,7 +96,30 @@ FileStruct NetworkServices::receiveFile(char * tampon, unsigned int port)
 	// Actual interpretation
 	while (true)
 	{
-		
+		char dataBuffer[DATA_LENGTH];
+		TlPacketInfo packetInfo = tlReceiver(dataBuffer);
+
+		// First packet
+		if (packetInfo.header.ctlChar == 'd')
+		{
+			// Copy file name
+			strncpy(fileIdentier.filename, dataBuffer, sizeof(dataBuffer));
+
+			// Estimate length not counting the filename
+			fileIdentier.sizeFile = (packetInfo.header.dernier - packetInfo.header.premier - 1) * DATA_LENGTH;
+
+			continue;
+		}
+
+		// Copy data into file buffer
+		int byteOffset = (packetInfo.header.courant - packetInfo.header.premier - 1) * DATA_LENGTH;
+		memcpy(tampon + byteOffset, dataBuffer, DATA_LENGTH);
+
+		if (packetInfo.header.ctlChar == 'e')
+		{
+			fileIdentier.succes = true;
+			break;
+		}
 	}
 
 	return fileIdentier;
