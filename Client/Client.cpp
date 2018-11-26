@@ -31,29 +31,28 @@ int main(void)
 	ifstream inFile;
 	string FileName;
 	string ipAdress;
-	unsigned int File_Length;
 	char FileContent[MAX_FILE_SIZE];
 
 
 	//start communication
 	while (1)
 	{
+		unsigned fileSize = 0;
+		memset(FileContent, '\0', MAX_FILE_SIZE);
+
 		printf("\n Entrez le nom du fichier a televerser ");
 		cin >> FileName;
 
 
 		if (FileName == "validation.txt") {
-			inFile.open("C:\\Users\\barm1815\\APP6\\validation.txt");
+			inFile.open("C:\\Users\\dene2303\\APP6\\validation.txt");
 			if (!inFile) {
 				cerr << "Unable to open file datafile.txt";
 				exit(1);   // call system to stop
 			}
 			while (!inFile.eof()) {
-				inFile >> FileContent;
-				//cout << FileContent;
+				FileContent[fileSize++] = inFile.get();
 			}
-			File_Length = inFile.tellg();
-			cout << File_Length;
 			inFile.close();
 		}
 		else {
@@ -64,11 +63,10 @@ int main(void)
 		cin >> ipAdress;
 
 		if (ipAdress == "127.0.0.1") {
-		
-			TransportLayer.start();
-			TransportLayer.sendFile(FileContent, File_Length);
-		
-		
+	
+			if(!TransportLayer.sendFile(FileContent, fileSize))
+				throw runtime_error("failed to send");
+
 		}
 
 

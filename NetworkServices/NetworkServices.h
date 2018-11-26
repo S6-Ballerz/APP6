@@ -13,6 +13,9 @@
 #define HEADER_SIZE 11
 #define DATA_LENGTH (PACKET_SIZE-HEADER_SIZE)
 
+#define SERVER "127.0.0.1"  //ip address of udp server
+#define PORT 8888   //The port on which to listen for incoming data
+
 struct FileStruct
 {
 	bool succes;
@@ -54,7 +57,7 @@ private:
 	SOCKET soc;
 	WSADATA wsa;
 	struct sockaddr_in server, si_other;
-	int slen;
+	int slen = sizeof(si_other);
 
 	// Private Methods
 	bool tlSend(TlHeader header, char* data);

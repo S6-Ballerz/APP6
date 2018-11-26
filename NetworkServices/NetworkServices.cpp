@@ -1,4 +1,5 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 #include "NetworkServices.h"
 #include <iostream>
 #include <winsock2.h>
@@ -7,16 +8,6 @@
 
 using namespace std;
 
-#define SERVER "127.0.0.1"  //ip address of udp server
-#define BUFLEN 512  //Max length of buffer
-#define PORT 8888   //The port on which to listen for incoming data
-
-struct sockaddr adress;
-struct sockaddr_in si_other;
-int soc, slen = sizeof(si_other);
-char buf[BUFLEN];
-char message[BUFLEN];
-WSADATA wsa;
 
 NetworkServices::NetworkServices()
 {
@@ -71,27 +62,36 @@ bool NetworkServices::stop()
 
 bool NetworkServices::sendFile(char * tampon, unsigned int size)
 {
-	/*TlHeader entete;
+	TlHeader entete;
 	char donnee[DATA_LENGTH];
-	char header_data[HEADER_SIZE];
-	int i = 0;
-	int j = 1;
 
-	while (i < MAX_FILE_SIZE) {
-		memcpy(donnee,tampon+(i*DATA_LENGTH), DATA_LENGTH)
-		
-		if (j == 1) {
-		
-			entete.premier = "d"; 
+	int packetCount = 1 + ceil((float)size / (float)DATA_LENGTH);
 
-		}
-		
-		j++;
+	// Send first packet containing file name
+	entete.premier = 0;
+	entete.courant = 0;
+	entete.dernier = packetCount - 1;
+	entete.CRC = 0x30303030;
+	entete.ctlChar = 'd';
+	strcpy(donnee, "validation.txt");
+	if (!tlSend(entete, donnee))
+		return false;
 
+	entete.ctlChar = 'x';
+	while (entete.courant < entete.dernier) 
+	{
+		memset(donnee, '\0', DATA_LENGTH);
+		strncpy(donnee, tampon, DATA_LENGTH);
 
-		tlSend();
-	}*/
-	return false;
+		++entete.courant;
+
+		if (entete.courant == entete.dernier)
+			entete.ctlChar = 'e';
+
+		if (!tlSend(entete, donnee))
+			return false;
+	}
+	return true;
 }
 
 FileStruct NetworkServices::receiveFile(char * tampon, unsigned int port)
@@ -135,6 +135,8 @@ FileStruct NetworkServices::receiveFile(char * tampon, unsigned int port)
 		int byteOffset = (packetInfo.header.courant - packetInfo.header.premier - 1) * DATA_LENGTH;
 		memcpy(tampon + byteOffset, dataBuffer, DATA_LENGTH);
 
+		//cout << "paquet code: " << packetInfo.header.ctlChar << endl;
+
 		if (packetInfo.header.ctlChar == 'e')
 		{
 			fileIdentier.succes = true;
@@ -151,9 +153,12 @@ bool NetworkServices::tlSend(TlHeader header, char* data)
 
 	memcpy(sendBuffer + 11, data, DATA_LENGTH);
 
-	snprintf(sendBuffer, 2, "%d", header.premier % 100);
-	snprintf(sendBuffer + 2, 2, "%d", header.dernier % 100);
-	snprintf(sendBuffer + 4, 2, "%d", header.courant % 100);
+	sendBuffer[0] = (header.premier % 100) / 10 + 0x30;
+	sendBuffer[1] = header.premier % 10 + 0x30;
+	sendBuffer[2] = (header.dernier % 100) / 10 + 0x30;
+	sendBuffer[3] = header.dernier % 10 + 0x30;
+	sendBuffer[4] = (header.courant % 100) / 10 + 0x30;
+	sendBuffer[5] = header.courant % 10 + 0x30;
 
 	sendBuffer[6] = header.ctlChar;
 	memcpy(sendBuffer + 7, &header.CRC, sizeof(header.CRC));
@@ -168,12 +173,15 @@ bool NetworkServices::tlSend(TlHeader header, char* data)
 TlPacketInfo NetworkServices::tlReceiver(char * data)
 {
 	unsigned byteCount;
-	char recvBuffer[PACKET_SIZE];
+	char recvBuffer[PACKET_SIZE + 1];
+	memset(recvBuffer, 0, PACKET_SIZE + 1);
 
 	if ((byteCount = recvfrom(soc, recvBuffer, PACKET_SIZE, 0, (struct sockaddr *) &si_other, &slen)) == SOCKET_ERROR)
 	{
-		throw runtime_error("Reception error");
+
 	}
+
+	cout << recvBuffer << endl;
 
 	TlPacketInfo rcvData;
 

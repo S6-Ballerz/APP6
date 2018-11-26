@@ -21,10 +21,8 @@ char fileBuffer[MAX_FILE_SIZE];
 
 void serverThreadFunction()
 {
-	while (true)
-	{
 		file = transLayer.receiveFile(fileBuffer);
-
+		
 		if (file.succes)
 		{
 			cout << "Nouveau fichier reçu." << endl;
@@ -32,11 +30,12 @@ void serverThreadFunction()
 			cout << "Taille du fichier: " << file.sizeFile << " octets" << endl;
 
 			// Write output file
-			fileStream.open(file.filename);
-
+			fileStream.open("C:\\Users\\dene2303\\APP6\\out\\validation.txt");
 			fileStream.write(fileBuffer, file.sizeFile);
 
 			fileStream.close();
+
+			cout << "hhh" << endl;
 		}
 		else
 		{
@@ -44,7 +43,6 @@ void serverThreadFunction()
 			cout << "Nom du fichier: " << file.filename << endl;
 			cout << "Taille du fichier: " << file.sizeFile << " octets" << endl;
 		}
-	}
 }
 
 int main()
