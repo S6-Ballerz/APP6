@@ -43,7 +43,7 @@ public:
 	~NetworkServices();
 
 	// Methods
-	bool start(char * ipAddress, unsigned int port = DEFAULT_PORT);
+	bool start(/*char * ipAddress, unsigned int port = DEFAULT_PORT*/);
 	bool stop();
 	bool sendFile(char* tampon, unsigned int size);
 	FileStruct receiveFile(char * tampon, unsigned int port = DEFAULT_PORT);
